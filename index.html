@@ -14,14 +14,33 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <div class="row">Local</div>
-        <div class="row">Período</div>
-        <button id="search">Buscar</button>
-        <a href="#"  id="hrfInvokeScript">$</a>
+        <div class="row">
+          <form>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">País</label>
+              <select class="form-control" id="country">
+                <option value=""></option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="row">
+          <form>
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Período</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>Últimas 24 horas</option>
+                <option>Todo o período</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <button type="button" class="btn btn-primary">Buscar</button>
       </div>
-      <div class="col">Casos</div>
-      <div class="col">Recuperados</div>
-      <div class="col" id="return">Mortes</div>
+      
+      <div class="col confirmed">Casos</div>
+      <div class="col recovered">Recuperados</div>
+      <div class="col deaths" id="return">Mortes</div>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
