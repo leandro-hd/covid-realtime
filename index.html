@@ -9,41 +9,44 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css">
+
+  <!-- Bootstrap JavaScript -->
+   <script src="bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js"></script>
+
 </head>
 <body>
   <div class="container">
     <div class="row">
       <div class="col">
-        <div class="row">
-          <form>
-            <div class="form-group">
-              <label for="exampleFormControlSelect1">País</label>
-              <select class="form-control" id="country">
-                <option value=""></option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="row">
-          <form>
-            <div class="form-group">
-              <label for="exampleFormControlSelect1">Período</label>
-              <select class="form-control" id="exampleFormControlSelect1">
-                <option>Últimas 24 horas</option>
-                <option>Todo o período</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <button type="button" class="btn btn-primary">Buscar</button>
+        <form>
+          <div class="form-group">
+            <label>País</label>
+            <select class="form-control" id="country">
+            </select>
+          </div><br/>
+          <div class="form-group">
+            <label>Período</label>
+            <select class="form-control" id="period">
+              <option value="day">Últimas 24 horas</option>
+              <option value="all">Todo o período</option>
+            </select>
+          </div><br/>
+          <div class="form-group">
+            <button type="button" id="btn" class="btn btn-primary">Buscar</button>
+          </div>
+        </form>
       </div>
       
-      <div class="col confirmed">Casos</div>
+      <div class="col confirmed">
+        <span>Casos</span>
+        <span id="confirmedRequest">...</span>
+      </div>
       <div class="col recovered">Recuperados</div>
-      <div class="col deaths" id="return">Mortes</div>
+      <div class="col deaths">Mortes</div>
     </div>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   <script src="script.js"></script>
 
