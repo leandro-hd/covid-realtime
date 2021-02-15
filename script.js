@@ -1,13 +1,11 @@
 let country = new XMLHttpRequest();
 let confirmed = new XMLHttpRequest();
-// let recovered = new XMLHttpRequest();
-// let deaths = new XMLHttpRequest();
-
-const countriesSelect = document.getElementById("country");
+let recovered = new XMLHttpRequest();
+let deaths = new XMLHttpRequest();
 
 country.open('GET', 'https://api.covid19api.com/countries');
-// recovered.open('GET', 'https://api.covid19api.com/dayone/country/south-africa/status/recovered');
-// deaths.open('GET', 'https://api.covid19api.com/dayone/country/south-africa/status/deaths');
+
+const countriesSelect = document.getElementById('country');
 
 country.onreadystatechange = () => {
   if(country.readyState == 4) {
@@ -24,75 +22,67 @@ country.onreadystatechange = () => {
       }
     } 
   }
-};
-
-country.send();  
+}; 
+country.send();
 
 const btn = document.getElementById('btn');
 
-const confirmedRequest = document.getElementById('confirmedRequest')
+btn.addEventListener('click', function() {
+  let selectCountry = document.getElementById('country');
+  let valueCountry = selectCountry.options[selectCountry.selectedIndex].value;
 
-btn.addEventListener("click", function() {
-  let selectCountry = document.getElementById('country')
-  let valueCountry = selectCountry.options[selectCountry.selectedIndex].value
+  let selectPeriod = document.getElementById('period');
+  let valuePeriod = selectPeriod.options[selectPeriod.selectedIndex].value;
 
-  let selectPeriod = document.getElementById('period')
-  let valuePeriod = selectPeriod.options[selectPeriod.selectedIndex].value
+  confirmed.open('GET', 'https://api.covid19api.com/summary');
 
-  if (valuePeriod === "day") {
-    confirmed.open('GET', 'https://api.covid19api.com/summary');
-  }
   confirmed.onreadystatechange = () => {
     if(confirmed.readyState == 4) {
       if(confirmed.status == 200) {
-        const confirmedConfirmed = JSON.parse(confirmed.responseText);       
-        for(let i = 0; i < confirmedConfirmed.Countries.length; i++) {          
-            if(confirmedConfirmed.Countries[i].Country === valueCountry) {
-              break;
-            } else {
-              var indexCountry = i
-            }
-        }
-        console.log(indexCountry)
-        console.log(confirmedConfirmed.Countries[0].Country)
+        confirmedRequest = document.getElementById('confirmedRequest');
       } 
     }
-  };
-  confirmed.send();
-});
+  }; 
 
-btn.addEventListener("click", function() {
-  confirmed.onreadystatechange = () => {
+  recovered.open('GET', 'https://api.covid19api.com/dayone/country/south-africa/status/recovered');
 
-    if(confirmed.readyState == 4) {
-      if(confirmed.status == 200) {
-        const json = JSON.parse(confirmed.responseText); 
-        confirmed.innerHTML = "Confirmados: " + json[246].Cases;
+  recovered.onreadystatechange = () => {
+    if(recovered.readyState == 4) {
+      if(recovered.status == 200) {
+        recoveredRequest = document.getElementById('recoveredRequest');
       } 
     }
   };  
-  confirmed.send();
-})
 
-recovered.onreadystatechange = () => {
+  deaths.open('GET', 'https://api.covid19api.com/dayone/country/south-africa/status/deaths');
 
-  if(recovered.readyState == 4) {
-    if(recovered.status == 200) {
-      const json = JSON.parse(recovered.responseText); 
-      console.log("Recuperados: " + json[246].Cases);
-    } 
-  }
+  deaths.onreadystatechange = () => {
+    if(deaths.readyState == 4) {
+      if(deaths.status == 200) {
+        deathsRequest = document.getElementById('deathsRequest');
+        const countrySelected = JSON.parse(confirmed.responseText);      
+        for(let i = 0; i < countrySelected.Countries.length; i++) {  
+          if (countrySelected.Countries[i].Country === valueCountry) {
+            let countryPosition = i;
+            if (valuePeriod === "day") {
+              confirmedRequest.innerHTML = '<p>' + countrySelected.Countries[countryPosition].NewConfirmed.toLocaleString('pt-BR') + '</p>';
+              recoveredRequest.innerHTML = '<p>' + countrySelected.Countries[countryPosition].NewRecovered.toLocaleString('pt-BR') + '</p>';
+              deathsRequest.innerHTML = '<p>' + countrySelected.Countries[countryPosition].NewDeaths.toLocaleString('pt-BR') + '</p>';
+            } else if (valuePeriod === "all") {
+              confirmedRequest.innerHTML = '<p>' + countrySelected.Countries[countryPosition].TotalConfirmed.toLocaleString('pt-BR') + '</p>';
+              recoveredRequest.innerHTML = '<p>' + countrySelected.Countries[countryPosition].TotalRecovered.toLocaleString('pt-BR') + '</p>';
+              deathsRequest.innerHTML = '<p>' + countrySelected.Countries[countryPosition].TotalDeaths.toLocaleString('pt-BR') + '</p>';
+            }
+            break;
+          } else {
+            confirmedRequest.innerHTML = 'Nenhum registro de casos nesse país!';
+          }
+        }
+      } 
+    }
+  };  
+
+  confirmed.send();   
   recovered.send();
-};
-
-
-deaths.onreadystatechange = () => {
-
-  if(deaths.readyState == 4) {
-    if(deaths.status == 200) {
-      const json = JSON.parse(deaths.responseText); 
-      console.log("Mortos: " + json[246].Cases);
-    } 
-  }
   deaths.send();
-};
+});
